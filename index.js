@@ -49,7 +49,13 @@ module.exports = class terminalTasks {
     }
   }
   add (task) {
-    this.tasks.push(makeTask(task))
+    if (Array.isArray(task)) {
+      task.forEach(taskItem => {
+        this.tasks.push(makeTask(taskItem))
+      })
+    } else {
+      this.tasks.push(makeTask(task))
+    }
     if (this.spinner.stop) {
       // Hide old spinner if it exists
       this.spinner.stop()

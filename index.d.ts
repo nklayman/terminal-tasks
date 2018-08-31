@@ -44,10 +44,10 @@ declare class TaskList {
    */
   fail(message?: string?)
   /**
-   * Add a task to list
-   * @param task Name of task or task object to add
+   * Add a task or array of tasks to list
+   * @param task Name of task or task object (optionally in an array) to add
    */
-  add(task: string | Task)
+  add(task: string | Task | (string | Task)[])
   /**
    * Re-display list
    */

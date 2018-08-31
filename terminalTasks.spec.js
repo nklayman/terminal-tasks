@@ -109,6 +109,16 @@ describe('add', () => {
     list.add('two')
     expect(mockOra.stop).toHaveBeenCalledTimes(1)
   })
+
+  test('Adds an array if provided', () => {
+    const list = new TaskList(['one'])
+    list.add(['two', 'three'])
+    expect(list.tasks).toEqual([
+      { name: 'one', status: 'running' },
+      { name: 'two', status: 'pending' },
+      { name: 'three', status: 'pending' }
+    ])
+  })
 })
 
 describe.each(['next', 'warn', 'info'])('%s', fn => {
