@@ -50,6 +50,10 @@ module.exports = class terminalTasks {
   }
   add (task) {
     this.tasks.push(makeTask(task))
+    if (this.spinner.stop) {
+      // Hide old spinner if it exists
+      this.spinner.stop()
+    }
     // Show task
     this.showList()
   }

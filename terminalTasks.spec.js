@@ -4,7 +4,8 @@ const mockOra = {
   fail: jest.fn(),
   succeed: jest.fn(),
   info: jest.fn(),
-  warn: jest.fn()
+  warn: jest.fn(),
+  stop: jest.fn()
 }
 mockOra.start = jest.fn(() => mockOra)
 jest.mock('ora', () => jest.fn(() => mockOra))
@@ -101,6 +102,12 @@ describe('add', () => {
     const list = new TaskList(['one'])
     list.add('two')
     expect(ora).toHaveBeenCalledTimes(2)
+  })
+
+  test('Stop old spinner when task is added', () => {
+    const list = new TaskList(['one'])
+    list.add('two')
+    expect(mockOra.stop).toHaveBeenCalledTimes(1)
   })
 })
 
