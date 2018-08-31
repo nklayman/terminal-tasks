@@ -1,13 +1,19 @@
 const TaskList = require('./index')
 
-const list = new TaskList(['First Task', { name: 'Second Task' }], {
-  pendingChar: '→ ',
-  ora: { color: 'magenta' }
-})
+const list = new TaskList(
+  ['yarn add terminal-tasks', "new TaskList(['My Task'])", '🌟  on Github!'],
+  {
+    pendingChar: '→ ',
+    ora: { color: 'magenta' }
+  }
+)
 
 setTimeout(() => {
   list.next()
-}, 1000)
-setTimeout(() => {
-  list.info('It worked')
 }, 2000)
+setTimeout(() => {
+  list.next()
+}, 4000)
+setTimeout(() => {
+  list.next()
+}, 6000)
