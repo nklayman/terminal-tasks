@@ -165,3 +165,25 @@ describe('fail', () => {
     expect(mockOra.fail).toBeCalledWith('task')
   })
 })
+
+describe('complete', () => {
+  test('message is shown if provided', () => {
+    jest.spyOn(console, 'log')
+    const list = new TaskList(['task1', 'task2'])
+    list.complete('expected')
+    expect(console.log).toBeCalledWith('expected')
+  })
+
+  test('All tasks are completed', () => {
+    console.log = jest.fn()
+    const list = new TaskList(['task1', 'task2'])
+    list.complete()
+    // Tasks are removed from list
+    expect(list.tasks).toEqual([])
+    // Ora is completed
+    expect(ora).toHaveBeenCalledTimes(2)
+    expect(mockOra.succeed).toHaveBeenCalledTimes(2)
+    expect(mockOra.succeed).toBeCalledWith('task1')
+    expect(mockOra.succeed).toBeCalledWith('task2')
+  })
+})

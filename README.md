@@ -91,3 +91,7 @@ Fail the current task and display it's name or the `message` argument. Will not 
 #### .add(task)
 
 Add a task to the list. Can be a string or task object.
+
+### .complete(message)
+
+Run .next() for each remaining task. Optionally takes a message argument which will be logged to console.

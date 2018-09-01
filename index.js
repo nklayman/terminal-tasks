@@ -25,26 +25,32 @@ module.exports = class terminalTasks {
     }).start()
   }
   next (message) {
-    this.spinner.succeed(message || this.tasks[0].name)
-    if (this.tasks.length > 1) {
-      // Start next spinner if there are tasks left
+    if (this.tasks.length > 0) {
+      this.spinner.succeed(message || this.tasks[0].name)
       this.tasks.splice(0, 1)
+    }
+    if (this.tasks.length > 0) {
+      // Start next spinner if there are tasks left
       this.showList()
     }
   }
   warn (message) {
-    this.spinner.warn(message || this.tasks[0].name)
-    if (this.tasks.length > 1) {
-      // Start next spinner if there are tasks left
+    if (this.tasks.length > 0) {
+      this.spinner.warn(message || this.tasks[0].name)
       this.tasks.splice(0, 1)
+    }
+    if (this.tasks.length > 0) {
+      // Start next spinner if there are tasks left
       this.showList()
     }
   }
   info (message) {
-    this.spinner.info(message || this.tasks[0].name)
-    if (this.tasks.length > 1) {
-      // Start next spinner if there are tasks left
+    if (this.tasks.length > 0) {
+      this.spinner.info(message || this.tasks[0].name)
       this.tasks.splice(0, 1)
+    }
+    if (this.tasks.length > 0) {
+      // Start next spinner if there are tasks left
       this.showList()
     }
   }
@@ -65,6 +71,14 @@ module.exports = class terminalTasks {
   }
   fail (message) {
     this.spinner.fail(message || this.tasks[0].name)
+  }
+  complete (message) {
+    Array.from(Array(this.tasks.length)).forEach(() => {
+      this.next()
+    })
+    if (message) {
+      console.log(message)
+    }
   }
 }
 

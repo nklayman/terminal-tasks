@@ -49,6 +49,11 @@ declare class TaskList {
    */
   add(task: string | Task | (string | Task)[])
   /**
+   * Run .next() for each remaining task
+   * @param message Message to log to console after completion
+   */
+  complete(message?: string)
+  /**
    * Re-display list
    */
   showList()
