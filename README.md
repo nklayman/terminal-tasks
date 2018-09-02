@@ -63,10 +63,15 @@ type: `object` (optional)
 ```javascript
 {
   // Character to show in front of pending tasks
-  //Should be 2 chars long
+  // Should be 2 chars long
   pendingChar: '- ',
+  // Character to show in front of messages
+  // Should have 2 spaces in front and 1 space after (4 chars total)
+  messageChar: '  > ',
+  // Hide messages when .next() is called
+  collapse: false,
   // ora options to set for every task
-  ora: { color: 'magenta' }
+  ora: {}
 }
 ```
 
@@ -92,6 +97,10 @@ Fail the current task and display it's name or the `message` argument. Will not 
 
 Add a task to the list. Can be a string or task object.
 
-### .complete(message)
+#### .complete(message)
 
 Run .next() for each remaining task. Optionally takes a message argument which will be logged to console.
+
+#### .message(message)
+
+Display an indented message below the current task. Will show when .next() is called unless `collapse` is set to `true` in options.

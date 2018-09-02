@@ -16,6 +16,14 @@ declare interface Options {
    */
   pendingChar: string
   /**
+   * Character to show in front of messages, defaults to "  > "
+   */
+  messageChar: string
+  /**
+   * Hide all messages when .next() is called, defaults to false
+   */
+  collapse: boolean
+  /**
    * Options to pass to Ora for this task
    */
   ora?: OraOptions
@@ -54,10 +62,14 @@ declare class TaskList {
    */
   complete(message?: string)
   /**
+   * Display a message indented under the current task
+   * @param message Message to display
+   */
+  message(message: string)
+  /**
    * Re-display list
    */
   showList()
-
 }
 
 export = TaskList

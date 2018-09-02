@@ -40,7 +40,11 @@ describe('constructor', () => {
 
   test('Options are set', () => {
     const list = new TaskList(['A task'], { option: 'expected' })
-    expect(list.options).toEqual({ option: 'expected', pendingChar: '- ' })
+    expect(list.options).toEqual({
+      option: 'expected',
+      pendingChar: '- ',
+      messageChar: '  > '
+    })
   })
 })
 
@@ -185,5 +189,41 @@ describe('complete', () => {
     expect(mockOra.succeed).toHaveBeenCalledTimes(2)
     expect(mockOra.succeed).toBeCalledWith('task1')
     expect(mockOra.succeed).toBeCalledWith('task2')
+  })
+})
+
+describe('message', () => {
+  test('Message is displayed', () => {
+    const list = new TaskList(['task1', 'task2'])
+    list.next()
+    list.message('expected')
+    expect(ora).toHaveBeenCalledWith({ text: 'task2\n  > expected' })
+  })
+
+  test('Old spinner is removed', () => {
+    const list = new TaskList(['task1', 'task2'])
+    list.message('expected')
+    expect(mockOra.stop).toBeCalled()
+  })
+
+  test('If collapse is false messages are shown on completion', () => {
+    const list = new TaskList(['task1'])
+    list.message('expected')
+    list.next()
+    expect(mockOra.succeed).toBeCalledWith('task1\n  > expected')
+  })
+
+  test('If collapse is true messages are shown on completion', () => {
+    const list = new TaskList(['task1'], { collapse: true })
+    list.message('expected')
+    list.next()
+    expect(mockOra.succeed).toBeCalledWith('task1')
+  })
+
+  test('Custom message char is used if provided', () => {
+    const list = new TaskList(['task1'], { messageChar: ' messageChar-' })
+    list.message('expected')
+    list.next()
+    expect(mockOra.succeed).toBeCalledWith('task1\n messageChar-expected')
   })
 })

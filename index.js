@@ -13,46 +13,42 @@ module.exports = class terminalTasks {
     this.tasks = tasks
 
     if (!options.pendingChar) options.pendingChar = '- '
+    if (!options.messageChar) options.messageChar = '  > '
     this.options = options
     if (this.tasks.length > 0) this.showList()
   }
   showList () {
-    const names = this.tasks.map(task => task.name)
+    const text = this.tasks
+      .map(task => this.taskText(task))
+      .join(`\n${this.options.pendingChar}`)
     this.spinner = ora({
-      text: names.join(`\n${this.options.pendingChar}`),
+      text,
       ...(this.options.ora || {}),
       ...(this.tasks[0].ora || {})
     }).start()
   }
-  next (message) {
+  nextTask (method, message) {
     if (this.tasks.length > 0) {
-      this.spinner.succeed(message || this.tasks[0].name)
+      const task = this.tasks[0]
+      // Show messages if collapse is false
+      const completeText =
+        message || (this.options.collapse ? task.name : this.taskText(task))
+      this.spinner[method](completeText)
       this.tasks.splice(0, 1)
     }
     if (this.tasks.length > 0) {
       // Start next spinner if there are tasks left
       this.showList()
     }
+  }
+  next (message) {
+    this.nextTask('succeed', message)
   }
   warn (message) {
-    if (this.tasks.length > 0) {
-      this.spinner.warn(message || this.tasks[0].name)
-      this.tasks.splice(0, 1)
-    }
-    if (this.tasks.length > 0) {
-      // Start next spinner if there are tasks left
-      this.showList()
-    }
+    this.nextTask('warn', message)
   }
   info (message) {
-    if (this.tasks.length > 0) {
-      this.spinner.info(message || this.tasks[0].name)
-      this.tasks.splice(0, 1)
-    }
-    if (this.tasks.length > 0) {
-      // Start next spinner if there are tasks left
-      this.showList()
-    }
+    this.nextTask('info', message)
   }
   add (task) {
     if (Array.isArray(task)) {
@@ -79,6 +75,29 @@ module.exports = class terminalTasks {
     if (message) {
       console.log(message)
     }
+  }
+  message (message) {
+    const task = this.tasks[0]
+    if (!task.messages) {
+      task.messages = []
+    }
+    task.messages.push(message)
+    if (this.spinner.stop) {
+      // Hide old spinner if it exists
+      this.spinner.stop()
+    }
+    this.showList()
+  }
+  taskText ({ name, messages }) {
+    let messageText = ''
+    if (messages) {
+      // So that message char is added to first message
+      messages.splice(0, 0, '')
+      messageText = messages.join(`\n${this.options.messageChar}`)
+      // Remove empty first item
+      messages.splice(0, 1)
+    }
+    return name + messageText
   }
 }
 

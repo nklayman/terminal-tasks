@@ -15,5 +15,8 @@ setTimeout(() => {
   list.next()
 }, 4000)
 setTimeout(() => {
+  list.message('Hey there, thanks for the star!')
+}, 5000)
+setTimeout(() => {
   list.next()
 }, 6000)
