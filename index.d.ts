@@ -27,22 +27,22 @@ declare class TaskList {
    * Pass the current task and start spinner on the next
    * @param message Text to show on pass, defaults to task name
    */
-  next(message?: string?)
+  next(message?: string)
   /**
    * Pass the current task with warn icon and start spinner on the next
    * @param message Text to show on pass, defaults to task name
    */
-  warn(message?: string?)
+  warn(message?: string)
   /**
    * Pass the current task with info icon and start spinner on the next
    * @param message Text to show on pass, defaults to task name
    */
-  info(message?: string?)
+  info(message?: string)
   /**
    * Fail current task
    * @param message Text to show on failure, defaults to task name
    */
-  fail(message?: string?)
+  fail(message?: string)
   /**
    * Add a task or array of tasks to list
    * @param task Name of task or task object (optionally in an array) to add
