@@ -4,7 +4,7 @@
 
 <p align="center">
 	<br>
-    <img width="600" src="./example.svg">
+    <img width="600" src="https://raw.githubusercontent.com/nklayman/terminal-tasks/master/example.svg?sanitize=true">
 	<br>
 </p>
 
