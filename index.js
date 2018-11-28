@@ -28,14 +28,19 @@ module.exports = class terminalTasks {
     }).start()
   }
   nextTask (method, message) {
-    if (this.tasks.length > 0) {
-      const task = this.tasks[0]
-      // Show messages if collapse is false
-      const completeText =
-        message || (this.options.collapse ? task.name : this.taskText(task))
-      this.spinner[method](completeText)
-      this.tasks.splice(0, 1)
+    if (this.tasks.length === 0) {
+      throw new Error(
+        `You called ".${
+          method === 'succeed' ? 'next' : method
+        }()" on a task list which did not have a current task`
+      )
     }
+    const task = this.tasks[0]
+    // Show messages if collapse is false
+    const completeText =
+      message || (this.options.collapse ? task.name : this.taskText(task))
+    this.spinner[method](completeText)
+    this.tasks.splice(0, 1)
     if (this.tasks.length > 0) {
       // Start next spinner if there are tasks left
       this.showList()
@@ -58,7 +63,7 @@ module.exports = class terminalTasks {
     } else {
       this.tasks.push(makeTask(task))
     }
-    if (this.spinner.stop) {
+    if (this.spinner && this.spinner.stop) {
       // Hide old spinner if it exists
       this.spinner.stop()
     }
@@ -78,11 +83,16 @@ module.exports = class terminalTasks {
   }
   message (message) {
     const task = this.tasks[0]
+    if (!task) {
+      throw new Error(
+        'You called ".message()" on a task list which did not have a current task'
+      )
+    }
     if (!task.messages) {
       task.messages = []
     }
     task.messages.push(message)
-    if (this.spinner.stop) {
+    if (this.spinner && this.spinner.stop) {
       // Hide old spinner if it exists
       this.spinner.stop()
     }
