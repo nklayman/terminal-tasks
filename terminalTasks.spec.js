@@ -108,10 +108,16 @@ describe('add', () => {
     expect(ora).toHaveBeenCalledTimes(2)
   })
 
-  test('Stop old spinner when task is added', () => {
+  test('Old spinner is removed ', () => {
     const list = new TaskList(['one'])
     list.add('two')
     expect(mockOra.stop).toHaveBeenCalledTimes(1)
+  })
+
+  test('Old spinner is not removed if it does not exist', () => {
+    const list = new TaskList()
+    list.add('test')
+    expect(mockOra.stop).not.toBeCalled()
   })
 
   test('Adds an array if provided', () => {
@@ -127,6 +133,14 @@ describe('add', () => {
 
 describe.each(['next', 'warn', 'info'])('%s', fn => {
   const oraFn = fn === 'next' ? 'succeed' : fn
+
+  test('Error is thrown if there are no tasks', () => {
+    const list = new TaskList()
+    expect(() => list[fn]()).toThrowError(
+      `You called ".${fn}()" on a task list which did not have a current task`
+    )
+  })
+
   test.each([['oneTask'], ['firstTask', 'secondTask']])(
     'Spinner is succeeded with task name',
     (...tasks) => {
@@ -171,11 +185,18 @@ describe('fail', () => {
 })
 
 describe('complete', () => {
-  test('message is shown if provided', () => {
+  test('Message is shown if provided', () => {
     jest.spyOn(console, 'log')
     const list = new TaskList(['task1', 'task2'])
     list.complete('expected')
     expect(console.log).toBeCalledWith('expected')
+  })
+
+  test('Message is not shown unless provided', () => {
+    jest.spyOn(console, 'log')
+    const list = new TaskList(['task1', 'task2'])
+    list.complete()
+    expect(console.log).not.toBeCalled()
   })
 
   test('All tasks are completed', () => {
@@ -193,17 +214,35 @@ describe('complete', () => {
 })
 
 describe('message', () => {
+  test('Error is thrown if there are no tasks', () => {
+    const list = new TaskList()
+    expect(() => list.message()).toThrowError(
+      'You called ".message()" on a task list which did not have a current task'
+    )
+  })
+
   test('Message is displayed', () => {
     const list = new TaskList(['task1', 'task2'])
     list.next()
     list.message('expected')
     expect(ora).toHaveBeenCalledWith({ text: 'task2\n  > expected' })
+    list.message('expected-2')
+    expect(ora).toHaveBeenCalledWith({
+      text: 'task2\n  > expected\n  > expected-2'
+    })
   })
 
   test('Old spinner is removed', () => {
     const list = new TaskList(['task1', 'task2'])
     list.message('expected')
     expect(mockOra.stop).toBeCalled()
+  })
+
+  test('Old spinner is not removed if it does not exist', () => {
+    const list = new TaskList()
+    list.tasks.push([{ name: 'hello' }])
+    list.message('expected')
+    expect(mockOra.stop).not.toBeCalled()
   })
 
   test('If collapse is false messages are shown on completion', () => {
