@@ -1,4 +1,4 @@
-# Terminal Tasks [![CircleCI](https://circleci.com/gh/nklayman/terminal-tasks.svg?style=svg)](https://circleci.com/gh/nklayman/terminal-tasks)
+# Terminal Tasks [![Actions Status](https://github.com/nklayman/terminal-tasks/workflows/Node%20CI/badge.svg)](https://github.com/nklayman/terminal-tasks/actions)
 
 > A simple terminal task list powered by [Ora](https://github.com/sindresorhus/ora).
 
