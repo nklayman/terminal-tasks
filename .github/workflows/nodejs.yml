@@ -22,6 +22,8 @@ jobs:
       with: 
         path: ~/.cache/yarn
         key: yarn-cache-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          yarn-cache-
     - name: Yarn install and test
       run: |
         yarn install
